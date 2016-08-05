@@ -1,7 +1,10 @@
-#include <stdio.h>
-#include <SDL2/SDL.h>
+/* cavestory.cpp
+ * Entry point for the game
+ */
+
+#include "game.h"
 
 int main(int argc, const char* argv[])  {
-    printf("Hi\n");
+    Game game;
     return 0;
 }
