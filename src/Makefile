@@ -13,21 +13,20 @@ CFLAGS = -Wall -g -pedantic
 
 # define any directories containing header files other than /usr/include
 #
-INCLUDES = -I/home/egerkav/include  -I../include
+INCLUDES = -I../include
 
 # define library paths in addition to /usr/lib
 #   if I wanted to include libraries not in /usr/lib I'd specify
 #   their path using -Lpath, something like:
-LFLAGS = -L/home/egerkav/lib  -L../lib
+LFLAGS = -L../libs
 
 # define any libraries to link into executable:
 #   if I want to link in libraries (libx.so or libx.a) I use the -llibname 
 #   option, something like (this will link in libmylib.so and libm.so:
-LIBS = -lSDL2 
+LIBS = -lSDL2 -lSDL2_image 
 
 # define the C source files
-SRCDIR = ./src
-SRCS = cavestory.cpp
+SRCS = cavestory.cpp graphics.cpp game.cpp sprite.cpp input.cpp
 
 # define the C object files 
 #
@@ -37,10 +36,13 @@ SRCS = cavestory.cpp
 # Below we are replacing the suffix .c of all words in the macro SRCS
 # with the .o suffix
 #
-OBJS = $(SRCDIR)/$(SRCS:.c=.o)
+OBJS = $(SRCS:.cpp=.o)
+
+OFLAG = -o
+
 
 # define the executable file 
-BUILDDIR = ./build
+BUILDDIR = ../build
 MAIN = cave
 
 #
@@ -51,18 +53,24 @@ MAIN = cave
 
 .PHONY: depend clean
 
+print-%: ; @echo $*=$($*)
+
+
 all:    $(MAIN)
 	@echo  CaveStory compilation complete
 
 $(MAIN): $(OBJS) 
-	$(CC) $(CFLAGS) $(INCLUDES) -o $(BUILDDIR)/$(MAIN) $(OBJS) $(LFLAGS) $(LIBS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LFLAGS) $(LIBS) $(OFLAG) $(BUILDDIR)/$(MAIN) 
 
 # this is a suffix replacement rule for building .o's from .c's
 # it uses automatic variables $<: the name of the prerequisite of
 # the rule(a .c file) and $@: the name of the target of the rule (a .o file) 
 # (see the gnu make manual section about automatic variables)
-.c.o:
-	$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
+.SUFFIXES : .o .cpp .c
+.cpp.o :
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+#.c.o:
+#	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
 	$(RM) *.o *~ $(BUILDDIR)/$(MAIN)
