@@ -26,7 +26,7 @@ LFLAGS = -L../libs
 LIBS = -lSDL2 -lSDL2_image 
 
 # define the C source files
-SRCS = cavestory.cpp graphics.cpp game.cpp sprite.cpp input.cpp
+SRCS = cavestory.cpp graphics.cpp game.cpp sprite.cpp input.cpp animatedsprite.cpp
 
 # define the C object files 
 #
